@@ -25,10 +25,11 @@
         {
             "name": "kafka",
             "module": "../../index.js#plug",
-            "description": "GraphQL service.",
+            "description": "Kafka gateway service.",
             "env" : {
-                "schemaDir": "process.env.SCHEMA_DIR||null",
-                "schemaFileName" : "process.env.SCHEMA_FILE_NAME||ca.kafka"
+                "kafkaBootstrapServers": "process.env.KAFKA_BOOTSTRAP_SERVERS||null",
+                "kafkaAPIKey": "process.env.KAFKA_API_KEY||null",
+                "kafkaAPISecret": "process.env.KAFKA_API_SECRET||null"
             }
         }
     ]

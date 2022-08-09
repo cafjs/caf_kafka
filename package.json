@@ -7,7 +7,7 @@
   "dependencies": {
       "caf_components" : "^0.4.0",
       "kafkajs" : "^2.1.0"
-  }
+  },
     "devDependencies": {
         "eslint": "^6.8.0",
         "nodeunit" : ">=0.9",

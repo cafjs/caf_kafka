@@ -22,6 +22,9 @@ jobs:
         run: yarn test
         env:
           REDIS_PORT_6379_TCP_ADDR: redis
+          KAFKA_BOOTSTRAP_SERVERS: ${{ secrets.KAFKA_BOOTSTRAP_SERVERS }}
+          KAFKA_API_KEY: ${{ secrets.KAFKA_API_KEY }}
+          KAFKA_API_SECRET: ${{ secrets.KAFKA_API_SECRET }}
       - name: Eslint
         run: yarn run eslint
       - name: Checktype
