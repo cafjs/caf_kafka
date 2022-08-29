@@ -1,3 +1,5 @@
+WORK IN PROGRESS, NOTHING TO SEE YET...
+
 # Caf.js
 
 Co-design cloud assistants with your web app and IoT devices.
@@ -24,7 +26,7 @@ and it can also poll external services/devices regularly, i.e., using Caf.js aut
 
     <External services/devices> -> <Kafka/Caf.js Gateway> -> <TopicA> -> <Kafka Streams API> -> <TopicB>
 
-A challenge is to provide a reasonable throughput while respecting event ordering. The strategy of the Kafka Streams API, one logical thread per partition, is too slow when Web API calls can take 100 msec or more...
+A challenge is to provide a reasonable throughput while respecting event ordering. The strategy of the Kafka Streams API, one logical thread per partition, is too slow when one Web API call can take 100 msec of latency or more...
 
 Luckily, only events with the same key need to be processed in order, and we can exploit concurrency between keys in the same partition to increase throughput.
 
