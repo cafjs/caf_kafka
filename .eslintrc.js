@@ -6,7 +6,7 @@ module.exports = {
     "env" : {
         "browser": true,
         "node": true,
-        "es6": true
+        "es2020": true
     },
     "rules": {
         // enable additional rules, mostly with auto fix...
