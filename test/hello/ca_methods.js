@@ -1,72 +1,56 @@
 "use strict";
+const caf = require('caf_core');
+const json_rpc = caf.caf_transport.json_rpc;
+
+const isAdmin = (self) => {
+    const name = json_rpc.splitName(self.__ca_getName__())[1];
+    return (name === 'admin');
+};
 
 exports.methods = {
     async __ca_init__() {
+        this.state.processed = 0;
+        if (isAdmin(this)) {
+            this.$.kafka.configure({
+                groupId: `${this.__ca_getName__()}-groupId`,
+                clientId: `${this.__ca_getName__()}-clientId`,
+                topic: this.$.props.kafkaTopic,
+                brokers: this.$.props.kafkaBrokers,
+                username: this.$.props.kafkaAPIKey,
+                password: this.$.props.kafkaAPISecret,
+                handlerMethodName: '__ca_handlerMethod__'
+            });
+        }
         this.$.log.debug("++++++++++++++++Calling init");
-        this.state.pulses = 0;
-        this.state.nCalls = 0;
-        this.scratch.altAll = [
-            {
-                id: "11",
-                tool: "hammer",
-                material: "metal"
-            },
-            {
-                id: "12",
-                tool: "wrench",
-                material: "metal"
-            }
-        ];
+        return [];
+    },
 
-        this.state.all = [
-            {
-                id: "1",
-                name: "foo",
-                age : 14
-            },
-            {
-                id: "2",
-                name: "bar",
-                age : 4
-            }
-        ];
-        this.state.lastResponse = {};
-        return [];
+    async __ca_handlerMethod__(blob) {
+        const msg = this.$.kafka.extractMessage(blob);
+        if (msg) {
+            this.$.log.debug(`Processing ${JSON.stringify(msg)}`);
+            this.state.processed = this.state.processed + 1;
+            return [];
+        } else {
+            return [];
+        }
     },
+
     async __ca_pulse__() {
-        this.state.pulses = this.state.pulses + 1;
-        this.$.log.debug('<<< Calling Pulse>>>' + this.state.pulses);
-        if (this.state.lastResponse) {
-            this.$.log.debug('Last response: ' +
-                             JSON.stringify(this.state.lastResponse));
-        }
+        this.$.log.debug('<<< Calling Pulse>>>');
         return [];
     },
-    async __ca_resolver__() {
-        return [null, {
-            Query: {
-                all(obj, args, ctx, info) {
-                    return ctx.self.state.all;
-                },
-                altAll(obj, args, ctx, info) {
-                    return ctx.self.scratch.altAll;
-                }
-            }
-        }];
-    },
-    async setResolver() {
-        this.$.kafka.setResolverMethod('__ca_resolver__');
+
+    async start() {
+        this.$.kafka.run();
         return [];
     },
-    async evalQuery(query) {
-        try {
-            this.$.kafka.setQuery(query);
-            let res = await this.$.kafka.dirtyEvalQuery(this);
-            return [null, res];
-        } catch (err) {
-            return [err];
-        }
+
+    async reset() {
+        this.$.kafka.reset();
+        return [];
     },
+
     async getState() {
         return [null, this.state];
     }

@@ -14,25 +14,10 @@ const crypto = require('crypto');
 const APP_FULL_NAME = 'root-kafka';
 
 const CA_OWNER_1='me'+ crypto.randomBytes(8).toString('hex');
-const CA_LOCAL_NAME_1='ca1';
+const CA_LOCAL_NAME_1='admin';
 const FROM_1 =  CA_OWNER_1 + '-' + CA_LOCAL_NAME_1;
 const FQN_1 = APP_FULL_NAME + '#' + FROM_1;
 
-const QUERY1 = `
-query {
-  all {
-     name
-  }
-}
-`;
-
-const QUERY2 = `
-query {
-  altAll {
-     tool
-  }
-}
-`;
 
 process.on('uncaughtException', function (err) {
                console.log("Uncaught Exception: " + err);
@@ -66,5 +51,10 @@ module.exports = {
         }
     },
 
+    hello(test) {
+        test.expect(1);
+        test.ok(true);
+        test.done();
+    }
 
 };

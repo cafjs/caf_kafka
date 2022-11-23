@@ -22,6 +22,20 @@
                     }
                 }
             ]
+        },
+        {
+            "name": "handler",
+            "components" : [
+                {
+                    "name": "props",
+                    "env" : {
+                        "kafkaBrokers": "process.env.KAFKA_BROKERS||null",
+                        "kafkaAPIKey": "process.env.KAFKA_API_KEY||null",
+                        "kafkaAPISecret": "process.env.KAFKA_API_SECRET||null",
+                        "kafkaTopic": "process.env.KAFKA_TOPIC||null"
+                    }
+                }
+            ]
         }
     ]
 }
