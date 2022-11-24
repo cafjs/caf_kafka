@@ -36,11 +36,6 @@ exports.methods = {
         }
     },
 
-    async __ca_pulse__() {
-        this.$.log.debug('<<< Calling Pulse>>>');
-        return [];
-    },
-
     async start() {
         this.$.kafka.run();
         return [];
