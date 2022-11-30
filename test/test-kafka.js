@@ -28,6 +28,24 @@ process.on('uncaughtException', function (err) {
 
 });
 
+const getNumProcessed = function(from) {
+    const s1 = new cli.Session('ws://root-kafka.localtest.me:3000',
+                               from, {from});
+
+    return new Promise((resolve, reject) => {
+        s1.onopen = async function() {
+            try {
+                const res = await s1.getState().getPromise();
+                console.log(res);
+                resolve(res.processed);
+                s1.close();
+            } catch (err) {
+                reject(err);
+            }
+        };
+    });
+};
+
 module.exports = {
     setUp(cb) {
        var self = this;
@@ -54,7 +72,7 @@ module.exports = {
     },
 
     async hello(test) {
-        test.expect(2);
+        test.expect(12);
         const self = this;
         let s1;
         const from1 = FROM_1;
@@ -82,6 +100,10 @@ module.exports = {
 
             await setTimeoutAsync(10000);
 
+            for (let i=0; i<10; i++) {
+                const n = await getNumProcessed(`${CA_OWNER_1}-user${i}`);
+                test.ok(n === 100, 'Wrong number of processed events');
+            }
             p = await s1.start().reset();
 
             p = await new Promise((resolve, reject) => {
