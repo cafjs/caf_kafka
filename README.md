@@ -1,5 +1,3 @@
-WORK IN PROGRESS, NOTHING TO SEE YET...
-
 # Caf.js
 
 Co-design cloud assistants with your web app and IoT devices.
