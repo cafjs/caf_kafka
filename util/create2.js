@@ -23,10 +23,11 @@ const init = async function() {
     const messages = [];
 
     for (let i=0; i<100; i++) {
-        const source = `user${i}`;
         for (let j=0; j<100; j++) {
-            const dest = Math.floor(Math.random()*100);
-            const target = `user${dest}`;
+            const sourceIndex = Math.floor(Math.random()*100);
+            const source = `user${sourceIndex}`;
+            const destIndex = Math.floor(Math.random()*100);
+            const target = `user${destIndex}`;
             messages.push({
                 key: source,
                 value: JSON.stringify({change: -1})
